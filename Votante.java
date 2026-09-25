@@ -23,7 +23,7 @@ public class Votante extends Ciudadano {
 	
 	public void setResidencia(Coordenadas residencia) {
 		if (residencia == null) {
-			System.out.println("Residencia invalida");
+			throw new IllegalArgumentException("La residencia ingresada no es valida");
 		} else {
 			this.residencia = residencia;
 		}

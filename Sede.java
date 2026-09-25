@@ -1,4 +1,6 @@
 package package_00;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -96,8 +98,8 @@ public class Sede {
 		return ubicacion;
 	}
 	
-	public HashMap<Integer, Mesa> getMapaMesas() {
-		return mapaMesas;
+	public Collection<Mesa> getMapaMesas() {
+		return Collections.unmodifiableCollection(mapaMesas.values());
 	}
 	
 	/**

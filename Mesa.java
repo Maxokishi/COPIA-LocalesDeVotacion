@@ -31,7 +31,7 @@ public class Mesa {
 	
 	public void setNumeroMesa(int numeroMesa) {
 		if (numeroMesa <= 0) {
-			System.out.println("Valor invalido"); // Despues manejar con excepciones cuando se repase ese contenido
+			throw new IllegalArgumentException("El numero de mesa debe ser mayor a 0"); // Despues manejar con excepciones cuando se repase ese contenido
 		} else {
 			this.numeroMesa = numeroMesa;
 		}
@@ -39,12 +39,10 @@ public class Mesa {
 	
 	public boolean setCapMax(int capMax) {
 		if (capMax <= 0) {
-			System.out.println("Valor invalido");
-			return false;
+			throw new IllegalArgumentException("La capacidad maxima debe ser mayor a 0");
 		} else {
 			if (listaVotantes != null && listaVotantes.size() > capMax) {
-				System.out.println("La nueva capacidad maxima de votantes es inferior a la cantidad de votantes ya asignados");
-				return false;
+				throw new IllegalArgumentException("La nueva capacidad maxima de votantes es inferior a la cantidad de votantes ya asignados");
 			} else {
 				this.capMax = capMax;
 				return true;
@@ -54,7 +52,7 @@ public class Mesa {
 	
 	public void setListaVotantes(ArrayList<Votante> listaVotantes) {
 		if (listaVotantes == null) {
-			System.out.println("Valor invalido");
+			throw new NullPointerException("La lista ingresada esta vacia");
 		} else {
 			this.listaVotantes = listaVotantes;
 		}
@@ -62,7 +60,7 @@ public class Mesa {
 	
 	public void setConteoVotos(HashMap<String, Integer> conteoVotos) {
 		if (conteoVotos == null) {
-			System.out.println("Valor invalido");
+			throw new NullPointerException("El mapa ingresado esta vacio");
 		} else {
 			this.conteoVotos = conteoVotos;
 		}

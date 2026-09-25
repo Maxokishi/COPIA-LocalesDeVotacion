@@ -1,7 +1,7 @@
 package package_00;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Vector;
 
 public class GestorDeColecciones {
@@ -71,11 +71,11 @@ public class GestorDeColecciones {
 		if (sede == null) {
 			System.out.println("La sede no existe");
 		} else {
-			HashMap<Integer, Mesa> mapaMesas = sede.getMapaMesas();
-			if (mapaMesas == null) {
+			Collection<Mesa> coleccionMesas = sede.getMapaMesas();
+			if (coleccionMesas == null) {
 				System.out.println("La sede no cuenta con mesas disponibles");
 			} else {
-				for (Mesa mesa : mapaMesas.values()) {
+				for (Mesa mesa : coleccionMesas) {
 					System.out.println("Numero de mesa: " + mesa.getNumeroMesa() + " Capacidad maxima: " + mesa.getCapMax());
 				}
 			}

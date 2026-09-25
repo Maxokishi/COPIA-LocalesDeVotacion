@@ -1,123 +1,239 @@
 package package_00;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Vector;
 
 public class ControlPersistenciaDeDatos {
 
     private static final String ARCHIVO_CSV = "sistema_votacion.csv";
-
-    // Metodo guardar (Sistema batch: graba al salir)
+    
+    /*
+     * Metodo guardar
+     *
+     * Se encarga de guardar el ID de las diferentes sedes, los diferentes numeros
+     * identificadores de mesa, las diferentes capacidades maximas de las mesas,
+     * los diferentes rut de cada votante, el nombre de cada votante, y las
+     * coordenadas del domicilio de cada votante.
+     * Una mesa con varios votantes genera varias filas mientras que una mesa 
+     * sin votantes genera una unica fila.
+     * 
+     */
+    
     public static void guardar(GestorDeColecciones gestor) {
-        // Obtenemos las sedes almacenadas en el gestor
-        Vector<Sede> sedes = gestor.getSedes();
-        if (sedes == null) return;
-
+        if (gestor == null || gestor.getSedes() == null) {
+            return;
+        }
         try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_CSV))) {
-            // Escribimos la cabecera del archivo CSV
-            pw.println("ID_Sede,Numero_Mesa,Rut_Votante,Nombre_Votante,X_Coord,Y_Coord");
+        	
+            // Cabecera del CSV
+        	
+            pw.println(
+                    "ID_Sede,Numero_Mesa,Capacidad_Mesa," +
+                    "Rut_Votante,Nombre_Votante,X_Coord,Y_Coord"
+            );
 
-            // Recorremos siguiendo el siguiente orden: Sede -> Mesa -> Votante
-            for (Sede sede : sedes) {
-                if (sede.getMapaMesas() != null) {
-                    for (Mesa mesa : sede.getMapaMesas()) {
-                        if (mesa.cantidadVotantes() > 0) {
-                        	ArrayList<Votante> listaVotantes = new ArrayList<Votante>();
-                        	for(int i = 0; i < mesa.cantidadVotantes(); i++) {
-                        		listaVotantes.add(mesa.getVotante(i));
-                        	}
-                        	
-                            for (Votante v : listaVotantes) {
-                                String linea = sede.getId() + "," +
-                                               mesa.getNumeroMesa() + "," +
-                                               v.getRut() + "," +
-                                               v.getNombre() + "," +
-                                               v.getResidencia().getX() + "," +
-                                               v.getResidencia().getY();
-                                pw.println(linea);
+
+            // Se recorren Sede -> Mesa -> Votante
+            
+            for (Sede sede : gestor.getSedes()) {
+                if (sede == null ||
+                    sede.getMapaMesas() == null) {
+                    continue;
+                }
+
+
+                for (Mesa mesa : sede.getMapaMesas()) {
+                    if (mesa == null) {
+                        continue;
+                    }
+
+                    // Caso para mesas sin votantes asignados
+
+                    if (mesa.cantidadVotantes() == 0) {
+                        String linea =
+                                sede.getId() + "," +
+                                mesa.getNumeroMesa() + "," +
+                                mesa.getCapMax() + ",,,,,";
+                        pw.println(linea);
+                    }
+
+                    // Caso para mesas que si tienen una cierta cantidad de votantes asignados
+                  
+                    else {
+                        for (int i = 0; i < mesa.cantidadVotantes(); i++) {
+                            
+                        	Votante votante = mesa.getVotante(i);
+                            if (votante == null) {
+                                continue;
                             }
+
+                            String linea =
+                                    sede.getId() + "," +
+                                    mesa.getNumeroMesa() + "," +
+                                    mesa.getCapMax() + "," +
+                                    votante.getRut() + "," +
+                                    votante.getNombre() + "," +
+                                    votante.getResidencia().getX() + "," +
+                                    votante.getResidencia().getY();
+
+                            pw.println(linea);
                         }
                     }
                 }
             }
+
+
             System.out.println("Datos guardados correctamente en el archivo CSV!");
+
         } catch (IOException e) {
             System.err.println("Error al guardar los datos en CSV: " + e.getMessage());
         }
     }
 
-    // Metodo cargar (Sistema batch: carga datos al iniciar)
+    /*
+     * Metodo cargar
+     *
+     * Si no existe archivo previo este retornara null y Main se encargara
+     * de crear los datos predeterminados, en caso de existir el csv
+     * se reconstruye el gestor a partir del archivo.
+     * 
+     */
+
     public static GestorDeColecciones cargar(Vector<Sede> sedesIniciales, HashMap<String, Integer> conteoVotosPlantilla) {
+
         File archivo = new File(ARCHIVO_CSV);
+
+
+        /* Se comprueba si existe o no archivo previo, en caso
+         * de no existir se inicializa el programa con datos
+         * predeterminados */
         
-        // Si no existe el archivo previo, retornamos null para que el Main cargue los datos de prueba
         if (!archivo.exists()) {
-            System.out.println("No se encontro archivo CSV previo. Se iniciara con datos nuevos.");
-            return null; 
+            System.out.println("No se encontro archivo CSV previo.");
+            System.out.println("Se iniciara con los datos predeterminados.");
+            return null;
         }
 
-        // Creamos un gestor nuevo
-        GestorDeColecciones gestorCargado = new GestorDeColecciones(sedesIniciales);
+        /*
+         * Si existe el CSV, creamos un gestor vacío.
+         *
+         * NO utilizamos sedesIniciales aquí.
+         *
+         * El estado persistido será el que está en el CSV.
+         */
+        GestorDeColecciones gestorCargado = new GestorDeColecciones(new Vector<Sede>());
+        
 
         try (BufferedReader br = new BufferedReader(new FileReader(ARCHIVO_CSV))) {
-            String linea = br.readLine(); // Leer y saltar la cabecera
+
+            // Se salta la cabacera
+        
+            String linea = br.readLine();
+
+            // Se leen todas las filas
             
             while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split(",");
-                if (partes.length >= 6) {
-                    try {
-                        int idSede = Integer.parseInt(partes[0].trim());
-                        int numMesa = Integer.parseInt(partes[1].trim());
-                        String rut = partes[2].trim();
-                        String nombre = partes[3].trim();
-                        double x = Double.parseDouble(partes[4].trim());
-                        double y = Double.parseDouble(partes[5].trim());
+            	
+                String[] partes = linea.split(",", -1); // -1 permite conservar las columnas vacias
 
-                        // Buscar la sede, si no existe en dentro de la coleccion, se crea
-                        Sede sedeEncontrada = gestorCargado.buscarSede(idSede);
-                        if (sedeEncontrada == null) {
-                            Coordenadas coordSede = new Coordenadas(0.0, 0.0); // Coordenadas por defecto
-                            sedeEncontrada = new Sede(idSede, 100, coordSede);
-                            gestorCargado.getSedes().add(sedeEncontrada);
-                        }
+                /* Las primeras tres columnas son obligatorias y corresponde
+                 * al ID de la sede, el numero de mesa y la capacidad maxima de la mesa */
+                
+                if (partes.length < 3) {
+                    continue;
+                }
 
-                        // Buscar la mesa en la sede, si no existe se crea
-                        Mesa mesaEncontrada = gestorCargado.buscarMesaEnSede(numMesa, sedeEncontrada);
-                        if (mesaEncontrada == null) {
-                            mesaEncontrada = new Mesa(numMesa, 50, new HashMap<>(conteoVotosPlantilla));
-                            sedeEncontrada.agregarMesa(mesaEncontrada);
-                        }
+                try {
+                	
+                    int idSede = Integer.parseInt(partes[0].trim());
+                    int numeroMesa = Integer.parseInt(partes[1].trim());
+                    int capacidadMesa = Integer.parseInt(partes[2].trim());
 
-                        // Agregar el votante a la mesa (evitando duplicados si ya estuviera)
+                    // Instrucciones para buscar o crear sede
+
+                    Sede sedeEncontrada = gestorCargado.buscarSede(idSede);
+                    if (sedeEncontrada == null) {
+
+                        /* Se usan valores definidos por el sistema en las
+                         * sedes */
+                    	
+                        Coordenadas coordenadasSede = new Coordenadas(0.0, 0.0);
+                        sedeEncontrada = new Sede(idSede, 2000, coordenadasSede);
+        
+                        gestorCargado.getSedes().add(sedeEncontrada);
+                    }
+
+                    // Instrucciones para buscar o crear mesa
+
+                    Mesa mesaEncontrada = gestorCargado.buscarMesaEnSede(numeroMesa, sedeEncontrada);
+                    if (mesaEncontrada == null) {
+
+                        /* Si la mesa no existe se crea utilizando la capacidad almacenada
+                         * en el csv */
+                    	
+                        mesaEncontrada = new Mesa(numeroMesa, capacidadMesa, new HashMap<>(conteoVotosPlantilla));
+                        sedeEncontrada.agregarMesa(mesaEncontrada);
+                        
+                    }
+
+
+                    /*
+                     * Instrucciones para cargar el votante 
+                     * 
+                     * 0 -> ID de la sede
+                     * 1 -> Numero de mesa
+                     * 2 -> Capacidad maxima
+                     * 3 -> Rut
+                     * 4 -> Nombre
+                     * 5 -> Coordenada X 
+                     * 6 -> Coordenada Y
+                     * 
+                     */
+                    
+                    if (partes.length >= 7 && !partes[3].trim().isEmpty()) {
+                    	
+                        String rut = partes[3].trim();
+                        String nombre = partes[4].trim();
+                        double x = Double.parseDouble(partes[5].trim());
+                        double y = Double.parseDouble(partes[6].trim());
+
+                        // Se comprueba que el votante no este ya asignado a la mesa
+                        
                         boolean existeVotante = false;
-                        ArrayList <Votante> listaVotantes = new ArrayList <Votante>();
-                        
-                        for(int i = 0; i < mesaEncontrada.cantidadVotantes(); i++) {
-                        	listaVotantes.add(mesaEncontrada.getVotante(i));
-                        }
-                        
-                        for (Votante vExistente : listaVotantes) {
-                            if (vExistente.getRut().equals(rut)) {
+                        for (int i = 0; i < mesaEncontrada.cantidadVotantes(); i++) {
+                            Votante votanteExistente = mesaEncontrada.getVotante(i);
+                            if (votanteExistente != null && votanteExistente.getRut() != null && votanteExistente.getRut().equals(rut)) {
                                 existeVotante = true;
                                 break;
                             }
                         }
-
-                        if (!existeVotante) {
-                            Coordenadas coordVotante = new Coordenadas(x, y);
-                            Votante votante = new Votante(rut, nombre, coordVotante);
+                        
+                        // En caso de que no exista se crea y se agrega
+                        
+                        if (!existeVotante) {	
+                            Coordenadas coordenadasVotante = new Coordenadas(x, y);
+                            Votante votante = new Votante(rut, nombre, coordenadasVotante);
                             mesaEncontrada.agregarVotante(votante);
+                            
                         }
-
-                    } catch (Exception ex) {
-                        System.err.println("Error procesando línea del CSV: " + linea);
                     }
+
+                } catch (Exception e) {
+                	
+                    System.err.println("Error procesando línea del CSV: " + linea);
+                    System.err.println("Informacion adicional: " + e.getMessage());
                 }
             }
+
             System.out.println("Datos cargados exitosamente desde el archivo CSV!");
             return gestorCargado;
+
             
         } catch (IOException e) {
             System.err.println("Error al leer el archivo CSV: " + e.getMessage());

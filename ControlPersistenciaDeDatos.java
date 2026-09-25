@@ -22,7 +22,7 @@ public class ControlPersistenciaDeDatos {
             // Recorremos siguiendo el siguiente orden: Sede -> Mesa -> Votante
             for (Sede sede : sedes) {
                 if (sede.getMapaMesas() != null) {
-                    for (Mesa mesa : sede.getMapaMesas().values()) {
+                    for (Mesa mesa : sede.getMapaMesas()) {
                         if (mesa.cantidadVotantes() > 0) {
                         	ArrayList<Votante> listaVotantes = new ArrayList<Votante>();
                         	for(int i = 0; i < mesa.cantidadVotantes(); i++) {

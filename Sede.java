@@ -29,7 +29,7 @@ public class Sede {
 	
 	public void setId(int id) {
 		if (id <= 0) {
-			System.out.println("ID no valido"); // Despues manejar con excepciones
+			throw new IllegalArgumentException("El ID debe ser mayor a 0");
 		} else {
 			this.id = id;
 		}
@@ -37,7 +37,7 @@ public class Sede {
 	
 	public void setCapMax(int capMax) {
 		if (capMax <= 0) {
-			System.out.println("Capacidad no valida");
+			throw new IllegalArgumentException("La capacidad maxima debe ser mayor a 0");
 		} else {
 			this.capMax = capMax;
 		}
@@ -45,7 +45,7 @@ public class Sede {
 	
 	public void setCuposDisponibles(int cuposDisponibles) {
 		if (cuposDisponibles < 0 || cuposDisponibles > capMax) {
-			System.out.println("Cantidad ingresada no valida");
+			throw new IllegalArgumentException("La cantidad de cupos ingresada no puede ser menor a 0 ni superar la capacidad maxima de la sede");
 		} else {
 			this.cuposDisponibles = cuposDisponibles;
 		}
@@ -53,7 +53,7 @@ public class Sede {
 	
 	public void setUbicacion(Coordenadas ubicacion) {
 		if (ubicacion == null) {
-			System.out.println("Ubicacion no valida");
+			throw new NullPointerException("La ubicacion ingresada no puede ser un valor nulo");
 		} else {
 			this.ubicacion = ubicacion;
 		}
@@ -76,7 +76,7 @@ public class Sede {
 	
 	public void setMapaMesas(HashMap<Integer, Mesa> mapaMesas) {
 		if (mapaMesas == null) {
-			System.out.println("Coleccion no valida");
+			throw new NullPointerException("El mapa ingresado no puede estar vacio");
 		} else {
 			this.mapaMesas = mapaMesas;
 		}

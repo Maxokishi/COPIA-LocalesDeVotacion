@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="ProyectoSIAUML">
+  <ClassDiagramComponents>
+    <Class name="BusquedaFallidaException" package="package_00" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="mensaje"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="Candidato" package="package_00" visibility="public" xPosition="320.0" yPosition="39.0">
+      <Fields>
+        <Field name="partido" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="String" name="nombre"/>
+          <Argument type="String" name="partido"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setPartido" returnType="void" visibility="public">
+          <Argument type="String" name="partido"/>
+        </Method>
+        <Method name="getPartido" returnType="String" visibility="public"/>
+        <Method name="obtenerDatos" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Ciudadano" package="package_00" visibility="public" xPosition="684.0" yPosition="20.0">
+      <Fields>
+        <Field name="rut" type="String" visibility="private"/>
+        <Field name="nombre" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="String" name="nombre"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setRut" returnType="void" visibility="public">
+          <Argument type="String" name="rut"/>
+        </Method>
+        <Method name="setNombre" returnType="void" visibility="public">
+          <Argument type="String" name="nombre"/>
+        </Method>
+        <Method name="getRut" returnType="String" visibility="public"/>
+        <Method name="getNombre" returnType="String" visibility="public"/>
+        <Method name="obtenerDatos" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ControlPersistenciaDeDatos" package="package_00" visibility="public" xPosition="965.0" yPosition="20.0">
+      <Fields>
+        <Field name="ARCHIVO_CSV" type="String" visibility="private" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="guardar" returnType="void" visibility="public" isStatic="true">
+          <Argument type="GestorDeColecciones" name="gestor"/>
+        </Method>
+        <Method name="cargar" returnType="GestorDeColecciones" visibility="public" isStatic="true">
+          <Argument type="Vector&lt;Sede&gt;" name="sedesIniciales"/>
+          <Argument type="HashMap&lt;String, Integer&gt;" name="conteoVotosPlantilla"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Coordenadas" package="package_00" visibility="public" xPosition="943.0" yPosition="203.0">
+      <Fields>
+        <Field name="x" type="double" visibility="private"/>
+        <Field name="y" type="double" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="double" name="x"/>
+          <Argument type="double" name="y"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setX" returnType="void" visibility="public">
+          <Argument type="double" name="x"/>
+        </Method>
+        <Method name="setY" returnType="void" visibility="public">
+          <Argument type="double" name="y"/>
+        </Method>
+        <Method name="getX" returnType="double" visibility="public"/>
+        <Method name="getY" returnType="double" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ExcedeCapacidadException" package="package_00" visibility="public" xPosition="17.0" yPosition="246.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="mensaje"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="GestorDeColecciones" package="package_00" visibility="public" xPosition="1804.0" yPosition="56.0">
+      <Fields>
+        <Field name="sedes" type="Vector&lt;Sede&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="Vector&lt;Sede&gt;" name="sedes"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getSedes" returnType="Vector&lt;Sede&gt;" visibility="public"/>
+        <Method name="agregarVotanteAMesa" returnType="void" visibility="public">
+          <Argument type="Votante" name="votante"/>
+          <Argument type="Mesa" name="mesa"/>
+        </Method>
+        <Method name="agregarMesaASede" returnType="void" visibility="public">
+          <Argument type="Mesa" name="mesa"/>
+          <Argument type="Sede" name="sede"/>
+        </Method>
+        <Method name="listarVotantesMesa" returnType="void" visibility="public">
+          <Argument type="Mesa" name="mesa"/>
+        </Method>
+        <Method name="listarMesasSede" returnType="void" visibility="public">
+          <Argument type="Sede" name="sede"/>
+        </Method>
+        <Method name="buscarVotanteEnMesa" returnType="Votante" visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="Mesa" name="mesa"/>
+        </Method>
+        <Method name="buscarMesaEnSede" returnType="Mesa" visibility="public">
+          <Argument type="int" name="numeroMesa"/>
+          <Argument type="Sede" name="sede"/>
+        </Method>
+        <Method name="eliminarVotanteDeMesa" returnType="Votante" visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="Mesa" name="mesa"/>
+        </Method>
+        <Method name="eliminarMesaDeSede" returnType="Mesa" visibility="public">
+          <Argument type="int" name="numeroMesa"/>
+          <Argument type="Sede" name="sede"/>
+        </Method>
+        <Method name="modificarNombreVotante" returnType="void" visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="Mesa" name="mesa"/>
+          <Argument type="String" name="nuevoNombre"/>
+        </Method>
+        <Method name="modificarNombreVotante" returnType="void" visibility="public">
+          <Argument type="Votante" name="votante"/>
+          <Argument type="String" name="nuevoNombre"/>
+        </Method>
+        <Method name="modificarResidenciaVotante" returnType="void" visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="Mesa" name="mesa"/>
+          <Argument type="Coordenadas" name="nuevoDomicilio"/>
+        </Method>
+        <Method name="modificarResidenciaVotante" returnType="void" visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="Mesa" name="mesa"/>
+          <Argument type="double" name="xNuevoDomicilio"/>
+          <Argument type="double" name="yNuevoDomicilio"/>
+        </Method>
+        <Method name="modificarResidenciaVotante" returnType="void" visibility="public">
+          <Argument type="Votante" name="votante"/>
+          <Argument type="Coordenadas" name="nuevoDomicilio"/>
+        </Method>
+        <Method name="modificarResidenciaVotante" returnType="void" visibility="public">
+          <Argument type="Votante" name="votante"/>
+          <Argument type="double" name="xNuevoDomicilio"/>
+          <Argument type="double" name="yNuevoDomicilio"/>
+        </Method>
+        <Method name="modificarCapMaxMesa" returnType="void" visibility="public">
+          <Argument type="int" name="numeroMesa"/>
+          <Argument type="Sede" name="sede"/>
+          <Argument type="int" name="nuevaCapMax"/>
+        </Method>
+        <Method name="buscarSede" returnType="Sede" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="listarSedes" returnType="void" visibility="public">
+          <Argument type="Vector&lt;Sede&gt;" name="sedes"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Main" package="package_00" visibility="public" xPosition="20.0" yPosition="134.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="MenuInteractivo" package="package_00" visibility="public" xPosition="17.0" yPosition="423.0">
+      <Fields>
+        <Field name="sedes" type="Vector&lt;Sede&gt;" visibility="private"/>
+        <Field name="conteoVotos" type="HashMap&lt;String, Integer&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="Vector&lt;Sede&gt;" name="sedes"/>
+          <Argument type="HashMap&lt;String, Integer&gt;" name="conteoVotos"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="leerEntradaUsuario" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Mesa" package="package_00" visibility="public" xPosition="1293.0" yPosition="562.0">
+      <Fields>
+        <Field name="numeroMesa" type="int" visibility="private"/>
+        <Field name="capMax" type="int" visibility="private"/>
+        <Field name="listaVotantes" type="ArrayList&lt;Votante&gt;" visibility="private"/>
+        <Field name="conteoVotos" type="HashMap&lt;String, Integer&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="numeroMesa"/>
+          <Argument type="int" name="capMax"/>
+          <Argument type="HashMap&lt;String, Integer&gt;" name="conteoVotos"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setNumeroMesa" returnType="void" visibility="public">
+          <Argument type="int" name="numeroMesa"/>
+        </Method>
+        <Method name="setCapMax" returnType="boolean" visibility="public">
+          <Argument type="int" name="capMax"/>
+        </Method>
+        <Method name="setListaVotantes" returnType="void" visibility="public">
+          <Argument type="ArrayList&lt;Votante&gt;" name="listaVotantes"/>
+        </Method>
+        <Method name="setConteoVotos" returnType="void" visibility="public">
+          <Argument type="HashMap&lt;String, Integer&gt;" name="conteoVotos"/>
+        </Method>
+        <Method name="getNumeroMesa" returnType="int" visibility="public"/>
+        <Method name="getCapMax" returnType="int" visibility="public"/>
+        <Method name="getListaVotantes" returnType="ArrayList&lt;Votante&gt;" visibility="public"/>
+        <Method name="getConteoVotos" returnType="HashMap&lt;String, Integer&gt;" visibility="public"/>
+        <Method name="agregarVotante" returnType="void" visibility="public">
+          <Argument type="Votante" name="votante"/>
+        </Method>
+        <Method name="buscarVotante" returnType="Votante" visibility="public">
+          <Argument type="String" name="RUT"/>
+        </Method>
+        <Method name="eliminarVotante" returnType="Votante" visibility="public">
+          <Argument type="String" name="rut"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Sede" package="package_00" visibility="public" xPosition="506.0" yPosition="419.0">
+      <Fields>
+        <Field name="id" type="int" visibility="private"/>
+        <Field name="capMax" type="int" visibility="private"/>
+        <Field name="cuposDisponibles" type="int" visibility="private"/>
+        <Field name="ubicacion" type="Coordenadas" visibility="private"/>
+        <Field name="mapaMesas" type="HashMap&lt;Integer, Mesa&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="int" name="id"/>
+          <Argument type="int" name="capMax"/>
+          <Argument type="Coordenadas" name="ubicacion"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setId" returnType="void" visibility="public">
+          <Argument type="int" name="id"/>
+        </Method>
+        <Method name="setCapMax" returnType="void" visibility="public">
+          <Argument type="int" name="capMax"/>
+        </Method>
+        <Method name="setCuposDisponibles" returnType="void" visibility="public">
+          <Argument type="int" name="cuposDisponibles"/>
+        </Method>
+        <Method name="setUbicacion" returnType="void" visibility="public">
+          <Argument type="Coordenadas" name="ubicacion"/>
+        </Method>
+        <Method name="setUbicacion" returnType="void" visibility="public">
+          <Argument type="double" name="x"/>
+          <Argument type="double" name="y"/>
+        </Method>
+        <Method name="setMapaMesas" returnType="void" visibility="public">
+          <Argument type="HashMap&lt;Integer, Mesa&gt;" name="mapaMesas"/>
+        </Method>
+        <Method name="getId" returnType="int" visibility="public"/>
+        <Method name="getCapMax" returnType="int" visibility="public"/>
+        <Method name="getCuposDisponibles" returnType="int" visibility="public"/>
+        <Method name="getUbicacion" returnType="Coordenadas" visibility="public"/>
+        <Method name="getMapaMesas" returnType="HashMap&lt;Integer, Mesa&gt;" visibility="public"/>
+        <Method name="decrementarCuposDisponibles" returnType="void" visibility="public"/>
+        <Method name="sumarCapacidadMesa" returnType="int" visibility="public"/>
+        <Method name="agregarMesa" returnType="void" visibility="public">
+          <Argument type="Mesa" name="mesa"/>
+        </Method>
+        <Method name="buscarMesa" returnType="Mesa" visibility="public">
+          <Argument type="int" name="numMesa"/>
+        </Method>
+        <Method name="retirarMesa" returnType="Mesa" visibility="public">
+          <Argument type="int" name="numMesa"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SistemaDeAsignacion" package="package_00" visibility="public" xPosition="320.0" yPosition="237.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="asignarMesa" returnType="boolean" visibility="private">
+          <Argument type="Votante" name="votante"/>
+          <Argument type="Sede" name="sede"/>
+        </Method>
+        <Method name="asignarSede" returnType="void" visibility="public">
+          <Argument type="Votante" name="votante"/>
+          <Argument type="Vector&lt;Sede&gt;" name="vectorSedes"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Ventana" package="package_00" visibility="public" xPosition="1804.0" yPosition="600.0">
+      <Fields>
+        <Field name="areaTexto" type="JTextArea" visibility="private"/>
+        <Field name="panelSubOpciones" type="JPanel" visibility="private"/>
+        <Field name="gestor" type="GestorDeColecciones" visibility="private"/>
+        <Field name="sedes" type="Vector&lt;Sede&gt;" visibility="private"/>
+        <Field name="conteoVotos" type="HashMap&lt;String, Integer&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="GestorDeColecciones" name="gestor"/>
+          <Argument type="Vector&lt;Sede&gt;" name="sedes"/>
+          <Argument type="HashMap&lt;String, Integer&gt;" name="conteoVotos"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="crearPanelOpciones" returnType="JPanel" visibility="private"/>
+        <Method name="mostrarSubOpcionesVotantes" returnType="void" visibility="private"/>
+        <Method name="mostrarSubOpcionesMesas" returnType="void" visibility="private"/>
+        <Method name="mostrarSubOpcionesSedes" returnType="void" visibility="private"/>
+        <Method name="crearBoton" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+        <Method name="crearBotonSub" returnType="JButton" visibility="private">
+          <Argument type="String" name="texto"/>
+          <Argument type="Color" name="color"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Votante" package="package_00" visibility="public" xPosition="1273.0" yPosition="185.0">
+      <Fields>
+        <Field name="estadoVoto" type="boolean" visibility="private"/>
+        <Field name="tieneMesa" type="boolean" visibility="private"/>
+        <Field name="residencia" type="Coordenadas" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="rut"/>
+          <Argument type="String" name="nombre"/>
+          <Argument type="Coordenadas" name="residencia"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setEstadoVoto" returnType="void" visibility="public">
+          <Argument type="boolean" name="estadoVoto"/>
+        </Method>
+        <Method name="setTieneMesa" returnType="void" visibility="public">
+          <Argument type="boolean" name="tieneMesa"/>
+        </Method>
+        <Method name="setResidencia" returnType="void" visibility="public">
+          <Argument type="Coordenadas" name="residencia"/>
+        </Method>
+        <Method name="setResidencia" returnType="void" visibility="public">
+          <Argument type="double" name="x"/>
+          <Argument type="double" name="y"/>
+        </Method>
+        <Method name="getEstadoVoto" returnType="boolean" visibility="public"/>
+        <Method name="getTieneMesa" returnType="boolean" visibility="public"/>
+        <Method name="getResidencia" returnType="Coordenadas" visibility="public"/>
+        <Method name="calcularDistanciaASede" returnType="double" visibility="public">
+          <Argument type="Sede" name="sede"/>
+        </Method>
+        <Method name="obtenerDatos" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="sedes" source="package_00.MenuInteractivo" target="package_00.Sede" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.ControlPersistenciaDeDatos" target="package_00.GestorDeColecciones" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.GestorDeColecciones" target="package_00.Votante" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="sedes" source="package_00.Ventana" target="package_00.Sede" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.Mesa" target="package_00.Votante" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="ubicacion" source="package_00.Sede" target="package_00.Coordenadas" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.Sede" target="package_00.Mesa" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="listaVotantes" source="package_00.Mesa" target="package_00.Votante" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Votante&gt;"/>
+    <UseRelation source="package_00.ControlPersistenciaDeDatos" target="package_00.Sede" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.Votante" target="package_00.Sede" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.Sede" target="package_00.Coordenadas" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="gestor" source="package_00.Ventana" target="package_00.GestorDeColecciones" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="mapaMesas" source="package_00.Sede" target="package_00.Mesa" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="HashMap&lt;Integer, Mesa&gt;"/>
+    <HasRelation name="residencia" source="package_00.Votante" target="package_00.Coordenadas" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.GestorDeColecciones" target="package_00.Sede" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.SistemaDeAsignacion" target="package_00.Votante" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="package_00.Votante" target="package_00.Ciudadano"/>
+    <UseRelation source="package_00.GestorDeColecciones" target="package_00.Mesa" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="sedes" source="package_00.GestorDeColecciones" target="package_00.Sede" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="package_00.Votante" target="package_00.Coordenadas" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="package_00.Candidato" target="package_00.Ciudadano"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

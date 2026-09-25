@@ -1,5 +1,5 @@
 package package_00;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Vector;
 
 /**
@@ -22,12 +22,12 @@ public class SistemaDeAsignacion {
 	
 	private boolean asignarMesa(Votante votante, Sede sede) {
 		
-		HashMap<Integer, Mesa> mapaMesas = sede.getMapaMesas();
-		if (mapaMesas == null) {
+		Collection<Mesa> coleccionMesas = sede.getMapaMesas();
+		if (coleccionMesas == null) {
 			return false;
 		}
 		
-		for (Mesa mesa : mapaMesas.values()) {
+		for (Mesa mesa : coleccionMesas) {
 			if (mesa != null) {
 				try {
 					mesa.agregarVotante(votante);

@@ -2,22 +2,39 @@ package package_00;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class GestorDeColecciones {
 	
 	private Vector<Sede> sedes;
+	private ArrayList<Candidato> candidatos;
 	
 	public GestorDeColecciones() {
 		sedes = new Vector<Sede>();
+		candidatos = new ArrayList<Candidato>();
+	}
+	
+	public GestorDeColecciones(Vector<Sede> sedes) {
+		this.sedes = sedes;
+		candidatos = new ArrayList<Candidato>();
+	}
+	
+	public GestorDeColecciones(Vector<Sede> sedes, ArrayList<Candidato> candidatos) {
+		this.sedes = sedes;
+		this.candidatos = candidatos;
 	}
 	
 	public Vector<Sede> getSedes() {
 	    return sedes;
 	}
 	
-	public GestorDeColecciones(Vector<Sede> sedes) {
-		this.sedes = sedes;
+	public ArrayList<Candidato> getCandidatos(ArrayList <Candidato> candidatos) {
+		return candidatos;
+	}
+	
+	public ArrayList<Candidato> getCandidatos() {
+		return candidatos;
 	}
 	
 	public void agregarVotanteAMesa(Votante votante, Mesa mesa) {
@@ -44,6 +61,32 @@ public class GestorDeColecciones {
 			    System.out.println("La mesa ha sido agregada con exito");
 			} catch (ExcedeCapacidadException e) {
 				System.out.println(e.getMessage());
+			}
+		}
+	}
+	
+	public void agregarCandidato(Candidato candidato) {
+		if (candidato == null) return;
+		
+		for(Candidato c : candidatos) {
+			if(c != null && c.getRut() != null && c.getRut().equals(candidato.getRut())) { // c!= null y c.getRut comprueba que no sea null, para poder compararlo con el candidato de la instancia
+				return;
+			}
+		}
+		
+		candidatos.add(candidato);
+	}
+	
+	public void listarCandidatos(ArrayList<Candidato> candidatos) {
+		if(candidatos == null || candidatos.isEmpty()) {
+			System.out.println("No existen candidatos disponibles");
+			return;
+		}
+		
+		System.out.println("Candidatos disponibles:");
+		for(Candidato c : candidatos) {
+			if(c != null) {
+				System.out.println(c.obtenerDatos());
 			}
 		}
 	}
@@ -285,5 +328,21 @@ public class GestorDeColecciones {
 				}
 			}
 		}
+	}
+	
+	public static HashMap<String, Integer> construirPlantillaVotos(ArrayList<Candidato> candidatos) {
+	    HashMap<String, Integer> plantilla = new HashMap<>();
+	    if (candidatos != null) {
+	        for (Candidato c : candidatos) {
+	            if (c != null && c.getNombre() != null) {
+	                plantilla.put(c.getNombre(), 0);
+	            }
+	        }
+	    }
+	    return plantilla;
+	}
+	
+	public HashMap<String, Integer> construirPlantillaVotos() {
+	    return construirPlantillaVotos(this.candidatos);
 	}
 }

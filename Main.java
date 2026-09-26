@@ -1,6 +1,7 @@
 package package_00;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -11,17 +12,18 @@ public class Main {
     	// Se crea una plantilla para que cada mesa lleve un conteo de votos
     	
         Vector<Sede> sedesIniciales = new Vector<>();
-        HashMap<String, Integer> plantillaConteoVotos = new HashMap<>();
-        plantillaConteoVotos.put("Candidato A", 0);
-        plantillaConteoVotos.put("Candidato B", 0);
-
+        ArrayList<Candidato> candidatosIniciales = new ArrayList<Candidato>();
+        
+        candidatosIniciales.add(new Candidato("11111111-1", "Romario Lincocheo", "Frente Amplio (FA)"));
+        candidatosIniciales.add(new Candidato("22222222-2", "Franco Naudon", "Partido Socialista (PS)"));
+        
+        HashMap<String, Integer> plantillaConteoVotos = GestorDeColecciones.construirPlantillaVotos(candidatosIniciales);
         // Se prueba cargar el CSV
         GestorDeColecciones gestor = ControlPersistenciaDeDatos.cargar(sedesIniciales, plantillaConteoVotos);
         
         // Si no hay archivo previo usamos los datos inicializados por defecto
         if (gestor == null) {
-            System.out.println("Sistema inicializado con un gestor vacio.");
-            
+            System.out.println("Sistema inicializado con un gestor vacio.");     
             try {
                 
             	/* Se crean datos por defecto para probar el sistema
@@ -48,7 +50,7 @@ public class Main {
                 asignadorDeSedesYMesas.asignarSede(votante_prueba, sedesIniciales);
                 asignadorDeSedesYMesas.asignarSede(votante_prueba_2, sedesIniciales);
 
-                gestor = new GestorDeColecciones(sedesIniciales);
+                gestor = new GestorDeColecciones(sedesIniciales, candidatosIniciales);
                 System.out.println("Datos iniciales de prueba y asignación por distancia cargados exitosamente.");
                 
             } catch (Exception e) {
@@ -56,9 +58,17 @@ public class Main {
             }
         }
         
+        if (gestor.getCandidatos() == null || gestor.getCandidatos().isEmpty()) {
+            for (Candidato c : candidatosIniciales) {
+                gestor.agregarCandidato(c);
+            }
+        }
+        
+        plantillaConteoVotos = gestor.construirPlantillaVotos();
+        
         Vector<Sede> sedes = gestor.getSedes(); 
         
-        MenuInteractivo menu = new MenuInteractivo(sedes, plantillaConteoVotos);
+        MenuInteractivo menu = new MenuInteractivo(sedes, plantillaConteoVotos, gestor.getCandidatos());
         try {
             menu.leerEntradaUsuario();
         } catch (IOException e) {

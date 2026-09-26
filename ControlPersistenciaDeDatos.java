@@ -6,12 +6,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
 public class ControlPersistenciaDeDatos {
 
     private static final String ARCHIVO_CSV = "sistema_votacion.csv";
+    private static final String ARCHIVO_CANDIDATOS_CSV = "candidatos.csv";
     
     /*
      * Metodo guardar
@@ -88,9 +90,9 @@ public class ControlPersistenciaDeDatos {
                 }
             }
 
-
+            guardarCandidatos(gestor);
             System.out.println("Datos guardados correctamente en el archivo CSV!");
-
+            
         } catch (IOException e) {
             System.err.println("Error al guardar los datos en CSV: " + e.getMessage());
         }
@@ -232,6 +234,12 @@ public class ControlPersistenciaDeDatos {
             }
 
             System.out.println("Datos cargados exitosamente desde el archivo CSV!");
+            
+            ArrayList<Candidato> candidatosCargados = cargarCandidatos();
+            for (Candidato c : candidatosCargados) {
+                gestorCargado.agregarCandidato(c);
+            }
+            
             return gestorCargado;
 
             
@@ -239,5 +247,47 @@ public class ControlPersistenciaDeDatos {
             System.err.println("Error al leer el archivo CSV: " + e.getMessage());
             return null;
         }
+    }
+    
+    public static void guardarCandidatos(GestorDeColecciones gestor) {
+        if (gestor == null || gestor.getCandidatos() == null) {
+            return;
+        }
+        try (PrintWriter pw = new PrintWriter(new FileWriter(ARCHIVO_CANDIDATOS_CSV))) {
+            pw.println("Rut,Nombre,Partido");
+            for (Candidato c : gestor.getCandidatos()) {
+                if (c == null) continue;
+                pw.println(
+                    c.getRut() + "," +
+                    c.getNombre() + "," +
+                    c.getPartido()
+                );
+            }
+        } catch (IOException e) {
+            System.err.println("Error al guardar candidatos: " + e.getMessage());
+        }
+    }
+    
+    public static ArrayList<Candidato> cargarCandidatos() {
+        ArrayList<Candidato> candidatos = new ArrayList<>();
+        File archivo = new File(ARCHIVO_CANDIDATOS_CSV);
+        if (!archivo.exists()) {
+            return candidatos;
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea = br.readLine(); // cabecera
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",", -1);
+                if (partes.length < 3) continue;
+                String rut = partes[0].trim();
+                String nombre = partes[1].trim();
+                String partido = partes[2].trim();
+                if (rut.isEmpty()) continue;
+                candidatos.add(new Candidato(rut, nombre, partido));
+            }
+        } catch (IOException e) {
+            System.err.println("Error al cargar candidatos: " + e.getMessage());
+        }
+        return candidatos;
     }
 }

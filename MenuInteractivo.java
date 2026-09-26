@@ -11,15 +11,17 @@ public class MenuInteractivo {
 	
 	private Vector<Sede> sedes;
 	private HashMap<String, Integer> conteoVotos;
+	private ArrayList<Candidato> candidatos;
 	
-	public MenuInteractivo(Vector<Sede> sedes,  HashMap<String, Integer> conteoVotos) {
+	public MenuInteractivo(Vector<Sede> sedes,  HashMap<String, Integer> conteoVotos, ArrayList<Candidato> candidatos) {
 		this.sedes = sedes;
 		this.conteoVotos = conteoVotos;
+		this.candidatos = candidatos;
 	}
 	
     public void leerEntradaUsuario() throws IOException { //IOExpection debido a la entrada de los usuarios en distintas opciones
     	
-        GestorDeColecciones gestor = new GestorDeColecciones(sedes);
+        GestorDeColecciones gestor = new GestorDeColecciones(sedes, candidatos);
     	BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
     	int opcion = 0;
     	while(true) {
@@ -586,7 +588,7 @@ public class MenuInteractivo {
     														}
     														esValidaCapMax = true;
     													}
-    													Mesa nueva = new Mesa(numMesaNueva, capMaxMesa, new HashMap<String, Integer>(conteoVotos));
+    													Mesa nueva = new Mesa(numMesaNueva, capMaxMesa, gestor.construirPlantillaVotos());
     													gestor.agregarMesaASede(nueva, sedeAgregarMesa);
     													break;
     												case 2:
@@ -802,7 +804,25 @@ public class MenuInteractivo {
     							
     							break;
     						case 2:
-    							break;
+    							System.out.println("1.- Mostrar candidatos");
+    							int opcionVotante = 0;
+    							try {
+    	    						opcionVotante = Integer.parseInt(lector.readLine());
+    	    					} catch (IllegalArgumentException e) {
+    	    						System.out.println("Debe ingresar un numero entero!");
+    	    						continue;
+    	    					}
+    							
+    							switch(opcionVotante) {
+    								case 1:
+    									gestor.listarCandidatos(candidatos);
+    									break;
+    								case 2:
+    									break;
+    								default:
+    									System.out.println("La opcion ingresada no es valida");
+    										
+    							}
     						case 3:
     							modoConsolaActivado = false;
     							break;
@@ -821,8 +841,6 @@ public class MenuInteractivo {
     				});
     				break;
     			case 3: //Acaba el sistema
-    				System.out.println("1 - Mostrar Candidatos");
-    				
     				return;
     			default: //Error por si coloca un numero que no es una opcion
     				System.out.println("La opción ingresada no es valida, intente ingresando 1 o 2");

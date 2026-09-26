@@ -801,7 +801,7 @@ public class Ventana extends JFrame {
                 esValidaCapMax = true;
             }
 
-            Mesa nueva = new Mesa(numMesaNueva, capMaxMesa, new HashMap<String, Integer>(conteoVotos));
+            Mesa nueva = new Mesa(numMesaNueva, capMaxMesa, gestor.construirPlantillaVotos());
             gestor.agregarMesaASede(nueva, sedeAgregarMesa);
         });
 
